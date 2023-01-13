@@ -39,7 +39,7 @@ router.patch('/komentar/:id', editKomentar);
 router.delete('/komentar/:id', deleteKomentar);
 
 
-router.get('/admin', getAdmin);
+router.post('/login', getAdmin);
 router.post('/admin', addAdmin);
 router.delete('/admin/:id', deleteAdmin);
 

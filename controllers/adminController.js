@@ -6,12 +6,15 @@ export const getAdmin = async(req, res)=>{
     try {
         const response = await Admin.findAll({
           where: {
-            username: req.body.username,
-            password: req.body.password
+            username: req.body.username
           }
         });
         if(response.length > 0) {
-          res.json(response)
+          if (response[0].password === req.body.password) {
+            res.json(response)
+          } else {
+            res.json({msg: 'Password Salah'})
+          }
         } else {
           res.json("Username / Password Salah");
         }
