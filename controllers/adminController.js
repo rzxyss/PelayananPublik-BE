@@ -1,6 +1,29 @@
 import path from "path";
 import fs from "fs";
 import Admin from "../models/adminModel.js";
+import Randomstring from "randomstring";
+
+export const getAllAdmin = async(req,res) => {
+  try {
+    const response = await Admin.findAll();
+    res.json(response);
+  } catch (error) {
+      console.log(error.message);
+  }
+}
+
+export const getToken = async(req,res) => {
+  try {
+    const response = await Admin.findAll({
+      where: {
+        token: req.body.token,
+      }
+    })
+    res.json(response)
+  } catch (error) {
+    console.log(error.message)
+  }
+}
 
 export const getAdmin = async(req, res)=>{
     try {
@@ -16,7 +39,7 @@ export const getAdmin = async(req, res)=>{
             res.json({msg: 'Password Salah'})
           }
         } else {
-          res.json("Username / Password Salah");
+          res.json({msg: 'Username Tidak Ada'})
         }
     } catch (error) {
         console.log(error.message);
@@ -24,8 +47,12 @@ export const getAdmin = async(req, res)=>{
 }
 
 export const addAdmin = async (req, res)=>{
+  const name = req.body.name;
+  const username = req.body.username;
+  const password = req.body.password;
+  const token = Randomstring.generate();
     try {
-        await Admin.create(req.body);
+        await Admin.create({name: name, username: username, password: password, token: token});
         res.status(201).json({msg: "Admin Berhasil Dibuat"});
     } catch (error) {
         console.log(error.message);

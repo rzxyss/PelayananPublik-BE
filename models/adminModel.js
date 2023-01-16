@@ -7,6 +7,7 @@ const Admin = db.define('tbl_admin', {
     name: DataTypes.STRING,
     username: DataTypes.STRING,
     password: DataTypes.STRING,
+    token: DataTypes.STRING,
     createdAt: {
         type: DataTypes.DATEONLY,
     },
