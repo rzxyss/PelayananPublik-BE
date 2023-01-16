@@ -4,7 +4,7 @@ import { deleteFaq, editFaq, getFaq, getFaqById, saveFaq } from "../controllers/
 import { deleteProgram, editProgram, getProgram, getProgramById, saveProgram } from "../controllers/programController.js";
 import { deletePengaduan, editPengaduan, getPengaduan, getPengaduanById, savePengaduan } from "../controllers/pengaduanController.js";
 import { deleteKomentar, editKomentar, getKomentar, getKomentarById, saveKomentar } from "../controllers/komentarController.js";
-import { addAdmin, deleteAdmin, getAdmin, getAllAdmin, getToken } from "../controllers/adminController.js";
+import { addAdmin, adminToken, deleteAdmin, loginAdmin, logoutAdmin } from "../controllers/adminController.js";
 
 const router = express.Router();
 
@@ -39,9 +39,9 @@ router.patch('/komentar/:id', editKomentar);
 router.delete('/komentar/:id', deleteKomentar);
 
 
-router.get('/admin', getAllAdmin);
-router.post('/token', getToken);
-router.post('/login', getAdmin);
+router.post('/token', adminToken);
+router.post('/login', loginAdmin);
+router.post('/logout', logoutAdmin);
 router.post('/admin', addAdmin);
 router.delete('/admin/:id', deleteAdmin);
 export default router;
