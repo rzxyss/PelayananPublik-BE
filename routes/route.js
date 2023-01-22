@@ -2,8 +2,7 @@ import  express from "express";
 import { getBerita, getBeritaById, saveBerita, editBerita, deleteBerita } from "../controllers/beritaController.js";
 import { deleteFaq, editFaq, getFaq, getFaqById, saveFaq } from "../controllers/faqController.js";
 import { deleteProgram, editProgram, getProgram, getProgramById, saveProgram } from "../controllers/programController.js";
-import { deletePengaduan, editPengaduan, getPengaduan, getPengaduanById, savePengaduan } from "../controllers/pengaduanController.js";
-import { deleteKomentar, editKomentar, getKomentar, getKomentarById, saveKomentar } from "../controllers/komentarController.js";
+import { deleteLaporan, getLaporan, detailLaporan, saveLaporan } from "../controllers/laporanController.js";
 import { addAdmin, adminToken, deleteAdmin, loginAdmin, logoutAdmin } from "../controllers/adminController.js";
 
 const router = express.Router();
@@ -26,18 +25,10 @@ router.post('/faq', saveFaq);
 router.patch('/faq/:id', editFaq);
 router.delete('/faq/:id', deleteFaq);
 
-router.get('/pengaduan', getPengaduan);
-router.get('/pengaduan/:id', getPengaduanById);
-router.post('/pengaduan', savePengaduan);
-router.patch('/pengaduan/:id', editPengaduan);
-router.delete('/pengaduan/:id', deletePengaduan);
-
-router.get('/komentar', getKomentar);
-router.get('/komentar/:id', getKomentarById);
-router.post('/komentar', saveKomentar);
-router.patch('/komentar/:id', editKomentar);
-router.delete('/komentar/:id', deleteKomentar);
-
+router.get('/laporan', getLaporan);
+router.get('/laporan/:id', detailLaporan);
+router.post('/laporan', saveLaporan);
+router.delete('/laporan/:id', deleteLaporan);
 
 router.post('/token', adminToken);
 router.post('/login', loginAdmin);
