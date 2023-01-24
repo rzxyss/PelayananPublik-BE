@@ -27,7 +27,7 @@ export const getProgramById = async(req, res)=>{
 
 export const saveProgram = (req, res)=>{
     if(req.files === null) return res.status(400).json({msg: "No File Uploaded"});
-    const judul_program= req.body.judul_program;
+    const judul_program = req.body.judul_program;
     const file = req.files.file;
     const fileSize = file.data.length;
     const ext = path.extname(file.name);
@@ -57,8 +57,8 @@ export const editProgram = async(req, res)=>{
     }); 
     if(!program) return res.status(404).json({msg: "No Data Found"});
     let fileName = "";
-    if(req.file === null){
-        fileName = Program.image;
+    if(req.files === null){
+        fileName = program.image;
     }else{
         const file = req.files.file;
         const fileSize = file.data.length;

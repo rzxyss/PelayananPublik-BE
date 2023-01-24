@@ -58,8 +58,8 @@ export const editBerita = async(req, res)=>{
     }); 
     if(!berita) return res.status(404).json({msg: "No Data Found"});
     let fileName = "";
-    if(req.file === null){
-        fileName = Berita.image;
+    if(req.files === null){
+        fileName = berita.image;
     }else{
         const file = req.files.file;
         const fileSize = file.data.length;

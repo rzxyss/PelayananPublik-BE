@@ -32,7 +32,6 @@ export const loginAdmin = async (req, res) => {
             },
           }
         );
-        sessionStorage.setItem('1', '1')
       } else {
         res.json({ msg: "Password Salah" });
       }
