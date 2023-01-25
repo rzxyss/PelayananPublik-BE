@@ -2,41 +2,40 @@ import Admin from "../models/adminModel.js";
 
 export const adminToken = async (req, res) => {
   try {
-    const response = await Admin.findAll({
+    const response = await Admin.findOne({
       where: {
         token: req.body.token,
       },
     });
-    res.json(response);
+    res.status(200).json(response.token);
   } catch (error) {
-    console.log(error.message);
+    res.status(402).json(error)
   }
 };
 
 export const loginAdmin = async (req, res) => {
   try {
-    const response = await Admin.findAll({
+    const response = await Admin.findOne({
       where: {
         username: req.body.username,
+        password: req.body.password,
       },
     });
-    if (response.length > 0) {
-      if (response[0].password === req.body.password) {
-        res.json(response)
-        const adminId = response[0].id;
+    if (!response) {
+      res.status(402).json("success false");
+    } else {
+      res.status(200).json(response.id);
+        const idAdmin = response.id
         await Admin.update(
-          { token: req.body.token },
+          {
+            token: req.body.token,
+          },
           {
             where: {
-              id: adminId,
+              id: idAdmin,
             },
           }
         );
-      } else {
-        res.json({ msg: "Password Salah" });
-      }
-    } else {
-      res.json({ msg: "Username Tidak Ada" });
     }
   } catch (error) {
     console.log(error.message);
@@ -45,16 +44,17 @@ export const loginAdmin = async (req, res) => {
 
 export const logoutAdmin = async (req, res) => {
   try {
-    const response = await Admin.findAll({
+    const response = await Admin.findOne({
       where: {
-        id: req.body.id,
+        token: req.body.token,
       },
     });
+    res.json(response.token)
     await Admin.update(
       { token: null },
       {
         where: {
-          id: response[0].id,
+          token: response.token,
         },
       }
     );
