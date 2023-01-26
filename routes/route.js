@@ -2,8 +2,8 @@ import  express from "express";
 import { getBerita, getBeritaById, saveBerita, editBerita, deleteBerita } from "../controllers/beritaController.js";
 import { deleteFaq, editFaq, getFaq, getFaqById, saveFaq } from "../controllers/faqController.js";
 import { deleteProgram, editProgram, getProgram, getProgramById, saveProgram } from "../controllers/programController.js";
-import { deleteLaporan, getLaporan, detailLaporan, saveLaporan } from "../controllers/laporanController.js";
-import { addAdmin, adminToken, deleteAdmin, loginAdmin, logoutAdmin } from "../controllers/adminController.js";
+import { deleteLaporan, getLaporan, detailLaporan, saveLaporan, getPengaduan, getAspirasi, getInformasi } from "../controllers/laporanController.js";
+import { addAdmin, checkToken, deleteAdmin, loginAdmin, logoutAdmin } from "../controllers/adminController.js";
 
 const router = express.Router();
 
@@ -26,11 +26,14 @@ router.patch('/faq/:id', editFaq);
 router.delete('/faq/:id', deleteFaq);
 
 router.get('/laporan', getLaporan);
+router.post('/pengaduan', getPengaduan);
+router.post('/aspirasi', getAspirasi);
+router.post('/informasi', getInformasi);
 router.get('/laporan/:id', detailLaporan);
 router.post('/laporan', saveLaporan);
 router.delete('/laporan/:id', deleteLaporan);
 
-router.post('/token', adminToken);
+router.post('/check', checkToken);
 router.post('/login', loginAdmin);
 router.post('/logout', logoutAdmin);
 router.post('/admin', addAdmin);
