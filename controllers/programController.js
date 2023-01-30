@@ -1,4 +1,3 @@
-import Berita from "../models/beritaModel.js";
 import path from "path";
 import fs from "fs";
 import Program from "../models/programModel.js";
@@ -6,19 +5,6 @@ import Program from "../models/programModel.js";
 export const getProgram = async(req, res)=>{
     try {
         const response = await Program.findAll();
-        res.json(response);
-    } catch (error) {
-        console.log(error.message);
-    }
-}
-
-export const getProgramById = async(req, res)=>{
-    try {
-        const response = await Program.findOne({
-            where: {
-                id : req.params.id 
-            }
-        });
         res.json(response);
     } catch (error) {
         console.log(error.message);
@@ -42,7 +28,7 @@ export const saveProgram = (req, res)=>{
         if(err) return res.status(500).json({msg: err.message});
         try {
             await Program.create({judul_program: judul_program, image: fileName, url: url});
-            res.status(201).json({msg: "Program Berhasil Dibuat."});
+            res.status(201).json({msg: "Berhasil Membuat Program"});
         } catch (error) {
             console.log(error.message);
         }
@@ -55,7 +41,7 @@ export const editProgram = async(req, res)=>{
             id : req.params.id 
         }
     }); 
-    if(!program) return res.status(404).json({msg: "No Data Found"});
+    if(!program) return res.status(404).json({msg: "Program Tidak Ada"});
     let fileName = "";
     if(req.files === null){
         fileName = program.image;
@@ -84,7 +70,7 @@ export const editProgram = async(req, res)=>{
                 id: req.params.id
             }
         });
-        res.status(200).json({msg: "Program Telah Diedit"});
+        res.status(200).json({msg: "Berhasil Mengupdate Program"});
     } catch (error) {
         console.log(error.message);
     }
@@ -96,7 +82,7 @@ export const deleteProgram = async(req, res)=>{
                 id : req.params.id 
             }
         }); 
-        if(!program) return res.status(404).json({msg: "No Data Found"});
+        if(!program) return res.status(404).json({msg: "Program Tidak Ada"});
 
         try {
             const filepath = `./public/images/${program.image}`;
@@ -106,7 +92,7 @@ export const deleteProgram = async(req, res)=>{
                     id : req.params.id 
                 }
             });
-            res.status(200).json({msg: "Program Sukses Dihapus"});    
+            res.status(200).json({msg: "Berhasil Menghapus FaQ"});    
         } catch (error) {
             console.log(error.message);
         }

@@ -3,26 +3,25 @@ import path from "path";
 import fs from "fs";
 
 export const getBerita = async (req, res) => {
+  const page = parseInt(req.query.page) || 0;
+  const limit = parseInt(req.query.limit) || 5;
+  const offset = limit * page;
   try {
-    const response = await Berita.findAll();
-    const count = await Berita.count();
-    res.json({
-        results: response,
-        totalRows: count
-    })
-  } catch (error) {
-    console.log(error.message);
-  }
-};
-
-export const getBeritaById = async (req, res) => {
-  try {
-    const response = await Berita.findOne({
-      where: {
-        id: req.params.id,
-      },
+    const results = await Berita.findAll({
+      limit: limit,
+      offset: offset,
     });
-    res.json(response);
+
+    const totalRows = await Berita.count();
+
+    const totalPage = Math.ceil(totalRows / limit);
+
+    res.json({
+      results: results,
+      page: page,
+      totalRows: totalRows,
+      totalPage: totalPage,
+    });
   } catch (error) {
     console.log(error.message);
   }
@@ -56,7 +55,7 @@ export const saveBerita = (req, res) => {
         image: fileName,
         url: url,
       });
-      res.status(201).json({ msg: "Berita Berhasil Dibuat." });
+      res.status(201).json({ msg: "Berhasil Membuat Berita" });
     } catch (error) {
       console.log(error.message);
     }
@@ -69,7 +68,7 @@ export const editBerita = async (req, res) => {
       id: req.params.id,
     },
   });
-  if (!berita) return res.status(404).json({ msg: "No Data Found" });
+  if (!berita) return res.status(404).json({ msg: "Berita Tidak Ada" });
   let fileName = "";
   if (req.files === null) {
     fileName = berita.image;
@@ -111,7 +110,7 @@ export const editBerita = async (req, res) => {
         },
       }
     );
-    res.status(200).json({ msg: "Berita Telah Diedit" });
+    res.status(200).json({ msg: "Berhasil Mengupdate Berita" });
   } catch (error) {
     console.log(error.message);
   }
@@ -123,7 +122,7 @@ export const deleteBerita = async (req, res) => {
       id: req.params.id,
     },
   });
-  if (!berita) return res.status(404).json({ msg: "No Data Found" });
+  if (!berita) return res.status(404).json({ msg: "Berita Tidak Ada" });
 
   try {
     const filepath = `./public/images/${berita.image}`;
@@ -133,7 +132,7 @@ export const deleteBerita = async (req, res) => {
         id: req.params.id,
       },
     });
-    res.status(200).json({ msg: "Berita Sukses Dihapus" });
+    res.status(200).json({ msg: "Berhasil Menghapus Berita" });
   } catch (error) {
     console.log(error.message);
   }

@@ -1,9 +1,26 @@
 import Laporan from "../models/laporanModel.js";
 
 export const getLaporan = async (req, res) => {
+  const page = parseInt(req.query.page) || 0;
+  const limit = parseInt(req.query.limit) || 5;
+  const offset = limit * page;
+
   try {
-    const response = await Laporan.findAll();
-    res.json(response);
+    const results = await Laporan.findAll({
+      limit: limit,
+      offset: offset,
+    });
+    
+    const totalRows = await Laporan.count();
+
+    const totalPage = Math.ceil(totalRows / limit);
+
+    res.json({
+      results: results,
+      page: page,
+      totalRows: totalRows,
+      totalPage: totalPage,
+    });
   } catch (error) {
     console.log(error.message);
   }
@@ -89,7 +106,7 @@ export const detailLaporan = async (req, res) => {
 export const saveLaporan = async (req, res) => {
   try {
     await Laporan.create(req.body);
-    res.status(201).json({ msg: "Laporan Berhasil Dibuat" });
+    res.status(201).json({ msg: "Berhasil Membuat Laporan" });
   } catch (error) {
     console.log(error.message);
   }
@@ -101,14 +118,14 @@ export const deleteLaporan = async (req, res) => {
       id: req.params.id,
     },
   });
-  if (!laporan) return res.status(404).json({ msg: "No Data Found" });
+  if (!laporan) return res.status(404).json({ msg: "Laporan Tidak Ada" });
   try {
     await Laporan.destroy({
       where: {
         id: req.params.id,
       },
     });
-    res.status(200).json({ msg: "Laporan Sukses Dihapus" });
+    res.status(200).json({ msg: "Berhasil Menghapus Laporan" });
   } catch (error) {
     console.log(error.message);
   }
