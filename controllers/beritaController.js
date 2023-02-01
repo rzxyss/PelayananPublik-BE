@@ -1,18 +1,39 @@
 import Berita from "../models/beritaModel.js";
 import path from "path";
 import fs from "fs";
+import { Op } from "sequelize";
 
 export const getBerita = async (req, res) => {
   const page = parseInt(req.query.page) || 0;
   const limit = parseInt(req.query.limit) || 5;
+  const search = req.query.search_query || "";
   const offset = limit * page;
   try {
     const results = await Berita.findAll({
       limit: limit,
       offset: offset,
+      where: {
+        [Op.or]: [
+          {
+            judul_berita: {
+              [Op.like]: "%" + search + "%",
+            },
+          },
+        ],
+      },
     });
 
-    const totalRows = await Berita.count();
+    const totalRows = await Berita.count({
+      where: {
+        [Op.or]: [
+          {
+            judul_berita: {
+              [Op.like]: "%" + search + "%",
+            },
+          },
+        ],
+      },
+    });
 
     const totalPage = Math.ceil(totalRows / limit);
 
@@ -22,6 +43,19 @@ export const getBerita = async (req, res) => {
       totalRows: totalRows,
       totalPage: totalPage,
     });
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+export const getBeritaById = async (req, res) => {
+  try {
+    const response = await Berita.findOne({
+      where: {
+        id: req.params.id,
+      },
+    });
+    res.json(response);
   } catch (error) {
     console.log(error.message);
   }

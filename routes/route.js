@@ -1,20 +1,21 @@
 import  express from "express";
-import { getBerita, saveBerita, editBerita, deleteBerita } from "../controllers/beritaController.js";
+import { getBerita, saveBerita, editBerita, deleteBerita, getBeritaById } from "../controllers/beritaController.js";
 import { deleteFaq, editFaq, getFaq, saveFaq } from "../controllers/faqController.js";
-import { deleteProgram, editProgram, getProgram, saveProgram } from "../controllers/programController.js";
+import { deleteProgram, editProgram, getProgram, getProgramById, saveProgram } from "../controllers/programController.js";
 import { deleteLaporan, getLaporan, detailLaporan, saveLaporan, getPengaduan, getAspirasi, getInformasi } from "../controllers/laporanController.js";
-import { verifyToken } from "../middleware/verifyToken.js";
-import { addAccount, getUsers, Login, Logout } from "../controllers/userContoller.js";
-import { refreshToken } from "../controllers/refreshToken.js";
+import { getUsers, SignIn, SignOut, SignUp } from "../controllers/userContoller.js";
+import { verifyToken } from "../controllers/verifyToken.js"
 
 const router = express.Router();
 
-router.get('/berita', verifyToken, getBerita);
+router.get('/berita', getBerita);
+router.get('/berita/:id', getBeritaById);
 router.post('/berita', saveBerita);
 router.patch('/berita/:id', editBerita);
 router.delete('/berita/:id', deleteBerita);
 
 router.get('/program', getProgram);
+router.get('/program/:id', getProgramById);
 router.post('/program', saveProgram);
 router.patch('/program/:id', editProgram);
 router.delete('/program/:id', deleteProgram);
@@ -25,16 +26,16 @@ router.patch('/faq/:id', editFaq);
 router.delete('/faq/:id', deleteFaq);
 
 router.get('/laporan', getLaporan);
-router.post('/pengaduan', verifyToken, getPengaduan);
-router.post('/aspirasi', getAspirasi);
-router.post('/informasi', getInformasi);
+router.get('/pengaduan', getPengaduan);
+router.get('/aspirasi', getAspirasi);
+router.get('/informasi', getInformasi);
 router.get('/laporan/:id', detailLaporan);
 router.post('/laporan', saveLaporan);
 router.delete('/laporan/:id', deleteLaporan);
 
 router.get('/users', getUsers);
-router.post('/users', addAccount);
-router.post('/login', Login);
-router.get('/token', refreshToken);
-router.delete('/logout', Logout);
+router.post('/signup', SignUp);
+router.post('/signin', SignIn);
+router.post('/token', verifyToken);
+router.delete ('/signout', SignOut);
 export default router;

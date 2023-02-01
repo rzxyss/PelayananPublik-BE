@@ -13,7 +13,7 @@ export const getUsers = async (req, res) => {
   }
 };
 
-export const addAccount = async (req, res) => {
+export const SignUp = async (req, res) => {
   const { name, username, password, confPassword } = req.body;
   if (password !== confPassword)
     return res
@@ -33,7 +33,7 @@ export const addAccount = async (req, res) => {
   }
 };
 
-export const Login = async (req, res) => {
+export const SignIn = async (req, res) => {
   try {
     const results = await Account.findAll({
       where: {
@@ -47,41 +47,37 @@ export const Login = async (req, res) => {
     const username = results[0].username;
     const accessToken = jwt.sign(
       { userId, name, username },
-      process.env.ACCESS_TOKEN_SECRET, {
-        expiresIn: '20s'
-    });
-    const refreshToken = jwt.sign(
-      { userId, name, username },
-      process.env.REFRESH_TOKEN_SECRET, {
-        expiresIn: '1d'
-    });
+      process.env.ACCESS_TOKEN_SECRET
+    );
     await Account.update(
-      { access_token: refreshToken },
+      { access_token: accessToken },
       {
         where: {
           id: userId,
         },
       }
     );
-    res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000,
-    });
     res.json({ accessToken });
   } catch (error) {
     res.status(404).json({ msg: "Username tidak ditemukan" });
   }
 };
 
-export const Logout = async (req, res) => {
-  const refreshToken = req.cookies.refreshToken;
-  if (!refreshToken) return res.sendStatus(204);
+export const SignOut = async (req, res) => {
+  const accessToken = req.body.accessToken;
+  if (!accessToken)
+    return res.status(204).json({
+      success: false,
+    });
   const results = await Account.findAll({
     where: {
-      access_token: refreshToken,
+      access_token: accessToken,
     },
   });
-  if (!results[0]) return res.sendStatus(204);
+  if (!results[0])
+    return res.status(204).json({
+      success: false,
+    });
   const userId = results[0].id;
   await Account.update(
     { access_token: null },
@@ -91,6 +87,7 @@ export const Logout = async (req, res) => {
       },
     }
   );
-  res.clearCookie("refreshToken");
-  return res.sendStatus(200);
+  return res.status(200).json({
+    success: true,
+  });;
 };
