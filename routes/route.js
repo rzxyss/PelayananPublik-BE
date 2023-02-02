@@ -1,14 +1,17 @@
 import  express from "express";
-import { getBerita, saveBerita, editBerita, deleteBerita, getBeritaById } from "../controllers/beritaController.js";
+import { getBerita, saveBerita, editBerita, deleteBerita, getBeritaById, getBeritaLatest, likeBerita } from "../controllers/beritaController.js";
 import { deleteFaq, editFaq, getFaq, saveFaq } from "../controllers/faqController.js";
 import { deleteProgram, editProgram, getProgram, getProgramById, saveProgram } from "../controllers/programController.js";
 import { deleteLaporan, getLaporan, detailLaporan, saveLaporan, getPengaduan, getAspirasi, getInformasi } from "../controllers/laporanController.js";
 import { getUsers, SignIn, SignOut, SignUp } from "../controllers/userContoller.js";
 import { verifyToken } from "../controllers/verifyToken.js"
+import { chat } from "../controllers/chatGTP.js";
 
 const router = express.Router();
 
 router.get('/berita', getBerita);
+router.get('/beritaterbaru', getBeritaLatest);
+router.patch('/likeberita/:id', likeBerita);
 router.get('/berita/:id', getBeritaById);
 router.post('/berita', saveBerita);
 router.patch('/berita/:id', editBerita);
@@ -38,4 +41,6 @@ router.post('/signup', SignUp);
 router.post('/signin', SignIn);
 router.post('/token', verifyToken);
 router.delete ('/signout', SignOut);
+
+router.post('/chat', chat)
 export default router;
