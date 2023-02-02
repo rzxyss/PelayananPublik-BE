@@ -61,6 +61,48 @@ export const getBeritaById = async (req, res) => {
   }
 };
 
+export const likeBerita = async (req, res) => {
+  const response = await Berita.findOne({
+    where: {
+      id: req.params.id,
+    },
+  });
+  if (!response) {
+    res.status(404).json({ msg: "Berita Tidak Ada" });
+  }
+  try {
+    await Berita.update(
+      {
+        like: 1,
+      },
+      {
+        where: {
+          id: req.params.id
+        },
+      }
+    );
+    res.status(200).json({
+      success: true,
+    });
+  } catch (error) {
+    res.status(404).json({
+      success: false,
+    });
+  }
+};
+
+export const getBeritaLatest = async (req, res) => {
+  try {
+    const response = await Berita.findAll({
+      limit: 3,
+      order: [["createdAt", "DESC"]],
+    });
+    res.json(response);
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
 export const saveBerita = (req, res) => {
   if (req.files === null)
     return res.status(400).json({ msg: "No File Uploaded" });

@@ -9,6 +9,7 @@ const Berita = db.define('tbl_berita',{
     isi_berita: DataTypes.TEXT,
     image: DataTypes.STRING,
     url: DataTypes.STRING,
+    like: DataTypes.INTEGER,
     createdAt: {
         type: DataTypes.DATEONLY,
     },
