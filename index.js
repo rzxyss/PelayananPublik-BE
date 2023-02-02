@@ -1,4 +1,4 @@
-import express from "express";
+import express, { urlencoded } from "express";
 import fileUpload from "express-fileupload";
 import cors from "cors";
 import rouse from "./routes/route.js";
@@ -15,6 +15,7 @@ app.use(
 );
 app.use(cookieParser());
 app.use(express.json());
+app.use(urlencoded({ extended: true }))
 app.use(fileUpload());
 app.use(express.static("public"));
 app.use(rouse);
