@@ -1,7 +1,7 @@
 import express, { urlencoded } from "express";
 import fileUpload from "express-fileupload";
 import cors from "cors";
-import rouse from "./routes/route.js";
+import route from "./routes/route.js";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 
@@ -18,6 +18,6 @@ app.use(express.json());
 app.use(urlencoded({ extended: true }))
 app.use(fileUpload());
 app.use(express.static("public"));
-app.use(rouse);
+app.use(route);
 
 app.listen(5000, () => console.log("Server Up and running..."));
