@@ -70,10 +70,11 @@ export const likeBerita = async (req, res) => {
   if (!response) {
     res.status(404).json({ msg: "Berita Tidak Ada" });
   }
+  const like = req.body.like
   try {
     await Berita.update(
       {
-        like: 1,
+        like: like,
       },
       {
         where: {
@@ -96,6 +97,18 @@ export const getBeritaLatest = async (req, res) => {
     const response = await Berita.findAll({
       limit: 3,
       order: [["createdAt", "DESC"]],
+    });
+    res.json(response);
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+export const getBeritaPopuler = async (req, res) => {
+  try {
+    const response = await Berita.findAll({
+      limit: 3,
+      order: [["like", "DESC"]],
     });
     res.json(response);
   } catch (error) {

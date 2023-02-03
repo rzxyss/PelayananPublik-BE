@@ -1,5 +1,5 @@
 import  express from "express";
-import { getBerita, saveBerita, editBerita, deleteBerita, getBeritaById, getBeritaLatest, likeBerita } from "../controllers/beritaController.js";
+import { getBerita, saveBerita, editBerita, deleteBerita, getBeritaById, getBeritaLatest, likeBerita, getBeritaPopuler } from "../controllers/beritaController.js";
 import { deleteFaq, editFaq, getFaq, saveFaq } from "../controllers/faqController.js";
 import { deleteProgram, editProgram, getProgram, getProgramById, saveProgram } from "../controllers/programController.js";
 import { deleteLaporan, getLaporan, detailLaporan, saveLaporan, getPengaduan, getAspirasi, getInformasi } from "../controllers/laporanController.js";
@@ -11,6 +11,7 @@ const router = express.Router();
 
 router.get('/berita', getBerita);
 router.get('/beritaterbaru', getBeritaLatest);
+router.get('/beritapopuler', getBeritaPopuler);
 router.patch('/likeberita/:id', likeBerita);
 router.get('/berita/:id', getBeritaById);
 router.post('/berita', saveBerita);
