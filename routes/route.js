@@ -5,7 +5,7 @@ import { deleteProgram, editProgram, getProgram, getProgramById, saveProgram } f
 import { deleteLaporan, getLaporan, detailLaporan, saveLaporan, getPengaduan, getAspirasi, getInformasi } from "../controllers/laporanController.js";
 import { getUsers, SignIn, SignOut, SignUp } from "../controllers/userContoller.js";
 import { verifyToken } from "../controllers/verifyToken.js"
-import { chat } from "../controllers/chatGTP.js";
+import { chat } from "../controllers/chatGPT.js";
 
 const router = express.Router();
 
