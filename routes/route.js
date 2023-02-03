@@ -3,7 +3,7 @@ import { getBerita, saveBerita, editBerita, deleteBerita, getBeritaById, getBeri
 import { deleteFaq, editFaq, getFaq, saveFaq } from "../controllers/faqController.js";
 import { deleteProgram, editProgram, getProgram, getProgramById, saveProgram } from "../controllers/programController.js";
 import { deleteLaporan, getLaporan, detailLaporan, saveLaporan, getPengaduan, getAspirasi, getInformasi } from "../controllers/laporanController.js";
-import { getUsers, SignIn, SignOut, SignUp } from "../controllers/userContoller.js";
+import { getUsers, SignIn, SignOut, SignUp } from "../controllers/accountContoller.js";
 import { verifyToken } from "../controllers/verifyToken.js"
 import { chat } from "../controllers/chatGPT.js";
 
