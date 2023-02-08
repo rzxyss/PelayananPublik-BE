@@ -2,6 +2,7 @@ import Berita from "../models/beritaModel.js";
 import path from "path";
 import fs from "fs";
 import { Op } from "sequelize";
+import sharp from "sharp";
 
 export const getBerita = async (req, res) => {
   const page = parseInt(req.query.page) || 0;
@@ -70,7 +71,7 @@ export const likeBerita = async (req, res) => {
   if (!response) {
     res.status(404).json({ msg: "Berita Tidak Ada" });
   }
-  const like = req.body.like
+  const like = req.body.like;
   try {
     await Berita.update(
       {
@@ -78,7 +79,7 @@ export const likeBerita = async (req, res) => {
       },
       {
         where: {
-          id: req.params.id
+          id: req.params.id,
         },
       }
     );
@@ -116,7 +117,7 @@ export const getBeritaPopuler = async (req, res) => {
   }
 };
 
-export const saveBerita = (req, res) => {
+export const saveBerita = async (req, res) => {
   if (req.files === null)
     return res.status(400).json({ msg: "No File Uploaded" });
   const judul_berita = req.body.judul_berita;
@@ -134,8 +135,14 @@ export const saveBerita = (req, res) => {
   if (fileSize > 5000000)
     return res.status(422).json({ msg: "Gambar lebih dari 5MB" });
 
-  file.mv(`./public/images/${fileName}`, async (err) => {
-    if (err) return res.status(500).json({ msg: err.message });
+  const compress = sharp(file.data)
+    .resize({ width: 640, height: 480 })
+    .jpeg({ quality: 80 })
+    .toFile(`./public/image/${fileName}`);
+
+  if (!compress) {
+    console.log("Error");
+  } else {
     try {
       await Berita.create({
         judul_berita: judul_berita,
@@ -148,7 +155,7 @@ export const saveBerita = (req, res) => {
     } catch (error) {
       console.log(error.message);
     }
-  });
+  }
 };
 
 export const editBerita = async (req, res) => {
