@@ -138,7 +138,7 @@ export const saveBerita = async (req, res) => {
   const compress = sharp(file.data)
     .resize({ width: 640, height: 480 })
     .jpeg({ quality: 80 })
-    .toFile(`./public/image/${fileName}`);
+    .toFile(`./public/images/${fileName}`);
 
   if (!compress) {
     console.log("Error");
@@ -183,9 +183,10 @@ export const editBerita = async (req, res) => {
     const filepath = `./public/images/${berita.image}`;
     fs.unlinkSync(filepath);
 
-    file.mv(`./public/images/${fileName}`, (err) => {
-      if (err) return res.status(500).json({ msg: err.message });
-    });
+    sharp(file.data)
+    .resize({ width: 640, height: 480 })
+    .jpeg({ quality: 80 })
+    .toFile(`./public/images/${fileName}`);
   }
   const judul_berita = req.body.judul_berita;
   const deskripsi_berita = req.body.deskripsi_berita;
