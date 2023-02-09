@@ -5,10 +5,10 @@ import Program from "../models/programModel.js";
 export const getProgram = async (req, res) => {
   try {
     const results = await Program.findAll();
-    const count = await Program.count()
+    const count = await Program.count();
     res.json({
-        results: results,
-        totalRows: count
+      results: results,
+      totalRows: count,
     });
   } catch (error) {
     console.log(error.message);
@@ -28,7 +28,7 @@ export const getProgramById = async (req, res) => {
   }
 };
 
-export const saveProgram = (req, res) => {
+export const saveProgram = async (req, res) => {
   if (req.files === null)
     return res.status(400).json({ msg: "No File Uploaded" });
   const judul_program = req.body.judul_program;
@@ -44,8 +44,14 @@ export const saveProgram = (req, res) => {
   if (fileSize > 5000000)
     return res.status(422).json({ msg: "Gambar lebih dari 5MB" });
 
-  file.mv(`./public/images/${fileName}`, async (err) => {
-    if (err) return res.status(500).json({ msg: err.message });
+  const compress = sharp(file.data)
+    .resize({ width: 640, height: 480 })
+    .jpeg({ quality: 80 })
+    .toFile(`./public/images/${fileName}`);
+
+  if (!compress) {
+    console.log("Error");
+  } else {
     try {
       await Program.create({
         judul_program: judul_program,
@@ -56,7 +62,7 @@ export const saveProgram = (req, res) => {
     } catch (error) {
       console.log(error.message);
     }
-  });
+  }
 };
 
 export const editProgram = async (req, res) => {
@@ -84,9 +90,10 @@ export const editProgram = async (req, res) => {
     const filepath = `./public/images/${program.image}`;
     fs.unlinkSync(filepath);
 
-    file.mv(`./public/images/${fileName}`, (err) => {
-      if (err) return res.status(500).json({ msg: err.message });
-    });
+    sharp(file.data)
+      .resize({ width: 640, height: 480 })
+      .jpeg({ quality: 80 })
+      .toFile(`./public/images/${fileName}`);
   }
   const judul_program = req.body.judul_program;
   const url = `${req.protocol}://${req.get("host")}/images/${fileName}`;
