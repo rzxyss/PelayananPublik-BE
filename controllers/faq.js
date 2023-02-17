@@ -1,4 +1,4 @@
-import Faq from "../models/faqModel.js";
+import Faq from "../models/faq.js";
 
 export const getFaq = async(req, res)=>{
     try {

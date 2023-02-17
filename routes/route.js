@@ -1,11 +1,13 @@
 import  express from "express";
-import { getBerita, saveBerita, editBerita, deleteBerita, getBeritaById, getBeritaLatest, likeBerita, getBeritaPopuler } from "../controllers/beritaController.js";
-import { deleteFaq, editFaq, getFaq, saveFaq } from "../controllers/faqController.js";
-import { deleteProgram, editProgram, getProgram, getProgramById, saveProgram } from "../controllers/programController.js";
-import { deleteLaporan, getLaporan, detailLaporan, saveLaporan, getPengaduan, getAspirasi, getInformasi } from "../controllers/laporanController.js";
-import { getUsers, SignIn, SignOut, SignUp } from "../controllers/accountContoller.js";
+import { getBerita, saveBerita, editBerita, deleteBerita, getBeritaById, getBeritaLatest, likeBerita, getBeritaPopuler } from "../controllers/berita.js";
+import { deleteFaq, editFaq, getFaq, saveFaq } from "../controllers/faq.js";
+import { deleteProgram, editProgram, getProgram, getProgramById, saveProgram } from "../controllers/program.js";
+import { deleteLaporan, getLaporan, detailLaporan, saveLaporan, getPengaduan, getAspirasi, getInformasi } from "../controllers/laporan.js";
+import { getUsers, SignIn, SignOut, SignUp } from "../controllers/account.js";
 import { verifyToken } from "../controllers/verifyToken.js"
 import { chat } from "../controllers/chatGPT.js";
+import { addAgenda, deleteAgenda, editAgenda, getAgenda, getTglAgenda } from "../controllers/agenda.js";
+import { addKegiatan, deleteKegiatan, editKegiatan, getKegiatan, getKegiatanById } from "../controllers/kegiatan.js";
 
 const router = express.Router();
 
@@ -44,4 +46,16 @@ router.post('/token', verifyToken);
 router.delete ('/signout', SignOut);
 
 router.post('/chat', chat)
+
+router.get('/kegiatan', getKegiatan);
+router.get('/kegiatan/:id', getKegiatanById);
+router.post('/kegiatan', addKegiatan);
+router.patch('/kegiatan/:id', editKegiatan);
+router.delete('/kegiatan/:id', deleteKegiatan);
+
+router.get('/agenda', getAgenda);
+router.post('/acara', getTglAgenda);
+router.post('/agenda', addAgenda);
+router.patch('/agenda/:id', editAgenda);
+router.delete('/agenda/:id', deleteAgenda);
 export default router;

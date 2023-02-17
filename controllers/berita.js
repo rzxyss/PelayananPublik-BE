@@ -1,4 +1,4 @@
-import Berita from "../models/beritaModel.js";
+import Berita from "../models/berita.js";
 import path from "path";
 import fs from "fs";
 import { Op } from "sequelize";
@@ -127,7 +127,7 @@ export const saveBerita = async (req, res) => {
   const fileSize = file.data.length;
   const ext = path.extname(file.name);
   const fileName = file.md5 + ext;
-  const url = `${req.protocol}://${req.get("host")}/images/${fileName}`;
+  const url = `${req.protocol}://${req.get("host")}/berita/${fileName}`;
   const allowedType = [".png", ".jpg", ".jpeg"];
 
   if (!allowedType.includes(ext.toLowerCase()))
@@ -138,7 +138,7 @@ export const saveBerita = async (req, res) => {
   const compress = sharp(file.data)
     .resize({ width: 640, height: 480 })
     .jpeg({ quality: 80 })
-    .toFile(`./public/images/${fileName}`);
+    .toFile(`./public/berita/${fileName}`);
 
   if (!compress) {
     console.log("Error");
@@ -180,18 +180,18 @@ export const editBerita = async (req, res) => {
     if (fileSize > 5000000)
       return res.status(422).json({ msg: "Image must be less than 5 MB" });
 
-    const filepath = `./public/images/${berita.image}`;
+    const filepath = `./public/berita/${berita.image}`;
     fs.unlinkSync(filepath);
 
     sharp(file.data)
     .resize({ width: 640, height: 480 })
     .jpeg({ quality: 80 })
-    .toFile(`./public/images/${fileName}`);
+    .toFile(`./public/berita/${fileName}`);
   }
   const judul_berita = req.body.judul_berita;
   const deskripsi_berita = req.body.deskripsi_berita;
   const isi_berita = req.body.isi_berita;
-  const url = `${req.protocol}://${req.get("host")}/images/${fileName}`;
+  const url = `${req.protocol}://${req.get("host")}/berita/${fileName}`;
   try {
     await Berita.update(
       {
@@ -222,7 +222,7 @@ export const deleteBerita = async (req, res) => {
   if (!berita) return res.status(404).json({ msg: "Berita Tidak Ada" });
 
   try {
-    const filepath = `./public/images/${berita.image}`;
+    const filepath = `./public/berita/${berita.image}`;
     fs.unlinkSync(filepath);
     await Berita.destroy({
       where: {

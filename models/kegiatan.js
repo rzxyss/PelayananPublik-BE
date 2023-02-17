@@ -3,13 +3,10 @@ import db from "../config/Database.js";
 
 const {DataTypes} = Sequelize;
 
-const Berita = db.define('tbl_berita',{
-    judul_berita: DataTypes.STRING,
-    deskripsi_berita: DataTypes.STRING,
-    isi_berita: DataTypes.TEXT,
+const Kegiatan = db.define('data_kegiatan',{
+    isi_kegiatan: DataTypes.TEXT,
     image: DataTypes.STRING,
     url: DataTypes.STRING,
-    like: DataTypes.INTEGER,
     createdAt: {
         type: DataTypes.DATEONLY,
     },
@@ -20,7 +17,7 @@ const Berita = db.define('tbl_berita',{
     freezeTableName: true
 });
 
-export default Berita;
+export default Kegiatan;
 
 (async()=>{
     await db.sync();

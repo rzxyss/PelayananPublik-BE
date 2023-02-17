@@ -1,4 +1,4 @@
-import Account from "../models/accountModel.js";
+import Account from "../models/account.js";
 
 export const verifyToken = async (req, res) => {
   try {

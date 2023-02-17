@@ -1,23 +1,24 @@
 import path from "path";
 import fs from "fs";
-import Program from "../models/programModel.js";
+import Kegiatan from "../models/kegiatan.js";
+import sharp from "sharp";
 
-export const getProgram = async (req, res) => {
+export const getKegiatan = async (req, res) => {
   try {
-    const results = await Program.findAll();
-    const count = await Program.count();
+    const results = await Kegiatan.findAll();
+    const count = await Kegiatan.count()
     res.json({
-      results: results,
-      totalRows: count,
+        results: results,
+        totalRows: count
     });
   } catch (error) {
     console.log(error.message);
   }
 };
 
-export const getProgramById = async (req, res) => {
+export const getKegiatanById = async (req, res) => {
   try {
-    const results = await Program.findOne({
+    const results = await Kegiatan.findOne({
       where: {
         id: req.params.id,
       },
@@ -28,15 +29,15 @@ export const getProgramById = async (req, res) => {
   }
 };
 
-export const saveProgram = async (req, res) => {
+export const addKegiatan = async (req, res) => {
   if (req.files === null)
     return res.status(400).json({ msg: "No File Uploaded" });
-  const judul_program = req.body.judul_program;
+  const isi_kegiatan = req.body.isi_kegiatan;
   const file = req.files.file;
   const fileSize = file.data.length;
   const ext = path.extname(file.name);
   const fileName = file.md5 + ext;
-  const url = `${req.protocol}://${req.get("host")}/images/${fileName}`;
+  const url = `${req.protocol}://${req.get("host")}/kegiatan/${fileName}`;
   const allowedType = [".png", ".jpg", ".jpeg"];
 
   if (!allowedType.includes(ext.toLowerCase()))
@@ -44,37 +45,37 @@ export const saveProgram = async (req, res) => {
   if (fileSize > 5000000)
     return res.status(422).json({ msg: "Gambar lebih dari 5MB" });
 
-  const compress = sharp(file.data)
+    const compress = sharp(file.data)
     .resize({ width: 640, height: 480 })
     .jpeg({ quality: 80 })
-    .toFile(`./public/images/${fileName}`);
+    .toFile(`./public/kegiatan/${fileName}`);
 
   if (!compress) {
     console.log("Error");
   } else {
     try {
-      await Program.create({
-        judul_program: judul_program,
+      await Kegiatan.create({
+        isi_kegiatan: isi_kegiatan,
         image: fileName,
         url: url,
       });
-      res.status(201).json({ msg: "Berhasil Membuat Program" });
+      res.status(201).json({ msg: "Berhasil Membuat Kegiatan" });
     } catch (error) {
       console.log(error.message);
     }
   }
 };
 
-export const editProgram = async (req, res) => {
-  const program = await Program.findOne({
+export const editKegiatan = async (req, res) => {
+  const results = await Kegiatan.findOne({
     where: {
       id: req.params.id,
     },
   });
-  if (!program) return res.status(404).json({ msg: "Program Tidak Ada" });
+  if (!results) return res.status(404).json({ msg: "Program Tidak Ada" });
   let fileName = "";
   if (req.files === null) {
-    fileName = program.image;
+    fileName = results.image;
   } else {
     const file = req.files.file;
     const fileSize = file.data.length;
@@ -87,48 +88,48 @@ export const editProgram = async (req, res) => {
     if (fileSize > 5000000)
       return res.status(422).json({ msg: "Image must be less than 5 MB" });
 
-    const filepath = `./public/images/${program.image}`;
+    const filepath = `./public/kegiatan/${results.image}`;
     fs.unlinkSync(filepath);
 
     sharp(file.data)
       .resize({ width: 640, height: 480 })
       .jpeg({ quality: 80 })
-      .toFile(`./public/images/${fileName}`);
+      .toFile(`./public/kegiatan/${fileName}`);
   }
-  const judul_program = req.body.judul_program;
-  const url = `${req.protocol}://${req.get("host")}/images/${fileName}`;
+  const isi_kegiatan = req.body.isi_kegiatan;
+  const url = `${req.protocol}://${req.get("host")}/kegiatan/${fileName}`;
   try {
-    await Program.update(
-      { judul_program: judul_program, image: fileName, url: url },
+    await Kegiatan.update(
+      { isi_kegiatan: isi_kegiatan, image: fileName, url: url },
       {
         where: {
           id: req.params.id,
         },
       }
     );
-    res.status(200).json({ msg: "Berhasil Mengupdate Program" });
+    res.status(200).json({ msg: "Berhasil Mengupdate Kegiatan" });
   } catch (error) {
     console.log(error.message);
   }
 };
 
-export const deleteProgram = async (req, res) => {
-  const program = await Program.findOne({
+export const deleteKegiatan = async (req, res) => {
+  const results = await Kegiatan.findOne({
     where: {
       id: req.params.id,
     },
   });
-  if (!program) return res.status(404).json({ msg: "Program Tidak Ada" });
+  if (!results) return res.status(404).json({ msg: "Kegiatan Tidak Ada" });
 
   try {
-    const filepath = `./public/images/${program.image}`;
+    const filepath = `./public/kegiatan/${results.image}`;
     fs.unlinkSync(filepath);
-    await Program.destroy({
+    await Kegiatan.destroy({
       where: {
         id: req.params.id,
       },
     });
-    res.status(200).json({ msg: "Berhasil Menghapus FaQ" });
+    res.status(200).json({ msg: "Berhasil Menghapus Kegiatan" });
   } catch (error) {
     console.log(error.message);
   }

@@ -1,4 +1,4 @@
-import Laporan from "../models/laporanModel.js";
+import Laporan from "../models/laporan.js";
 
 export const getLaporan = async (req, res) => {
   const page = parseInt(req.query.page) || 0;

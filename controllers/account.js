@@ -1,4 +1,4 @@
-import Account from "../models/accountModel.js";
+import Account from "../models/account.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
