@@ -4,6 +4,7 @@ import db from "../config/Database.js";
 const { DataTypes } = Sequelize;
 
 const Faq = db.define('data_faq', {
+    type: DataTypes.STRING,
     question: DataTypes.STRING,
     answer: DataTypes.STRING,
     createdAt: {
