@@ -1,8 +1,36 @@
+import { Sequelize } from "sequelize";
 import Agenda from "../models/agenda.js";
 
 export const getAgenda = async (req, res) => {
   try {
-    const results = await Agenda.findAll();
+    const results = await Agenda.findAll({
+      attributes: {
+        include: [
+          "id",
+          "nama_acara",
+          "peserta",
+          "tgl_acara",
+          [
+            Sequelize.fn
+            (
+              "DATE_FORMAT", 
+              Sequelize.col("jam_mulai"), 
+              "%H:%i"
+            ),
+            "jam_mulai",
+          ],
+          [
+            Sequelize.fn
+            (
+              "DATE_FORMAT", 
+              Sequelize.col("jam_selesai"), 
+              "%H:%i"
+            ),
+            "jam_selesai",
+          ],
+        ]
+      }
+    });
     const count = await Agenda.count()
     res.json({
         results: results,
@@ -19,6 +47,32 @@ export const getTglAgenda = async (req, res) => {
       where: {
         tgl_acara: req.body.tgl_acara,
       },
+      attributes: {
+        include: [
+          "id",
+          "nama_acara",
+          "peserta",
+          "tgl_acara",
+          [
+            Sequelize.fn
+            (
+              "DATE_FORMAT", 
+              Sequelize.col("jam_mulai"), 
+              "%H:%i"
+            ),
+            "jam_mulai",
+          ],
+          [
+            Sequelize.fn
+            (
+              "DATE_FORMAT", 
+              Sequelize.col("jam_selesai"), 
+              "%H:%i"
+            ),
+            "jam_selesai",
+          ],
+        ]
+      }
     });
     res.json(response);
   } catch (error) {
