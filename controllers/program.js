@@ -46,8 +46,7 @@ export const saveProgram = async (req, res) => {
     return res.status(422).json({ msg: "Gambar lebih dari 5MB" });
 
   const compress = sharp(file.data)
-    .resize({ width: 640, height: 480 })
-    .jpeg({ quality: 80 })
+    .jpeg({ quality: 60 })
     .toFile(`./public/program/${fileName}`);
 
   if (!compress) {
@@ -92,8 +91,7 @@ export const editProgram = async (req, res) => {
     fs.unlinkSync(filepath);
 
     sharp(file.data)
-      .resize({ width: 640, height: 480 })
-      .jpeg({ quality: 80 })
+      .jpeg({ quality: 60 })
       .toFile(`./public/program/${fileName}`);
   }
   const judul_program = req.body.judul_program;

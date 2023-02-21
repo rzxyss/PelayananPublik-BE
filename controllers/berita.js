@@ -136,8 +136,7 @@ export const saveBerita = async (req, res) => {
     return res.status(422).json({ msg: "Gambar lebih dari 5MB" });
 
   const compress = sharp(file.data)
-    .resize({ width: 640, height: 480 })
-    .jpeg({ quality: 80 })
+  .jpeg({ quality: 60 })
     .toFile(`./public/berita/${fileName}`);
 
   if (!compress) {
@@ -184,8 +183,7 @@ export const editBerita = async (req, res) => {
     fs.unlinkSync(filepath);
 
     sharp(file.data)
-    .resize({ width: 640, height: 480 })
-    .jpeg({ quality: 80 })
+    .jpeg({ quality: 60 })
     .toFile(`./public/berita/${fileName}`);
   }
   const judul_berita = req.body.judul_berita;
