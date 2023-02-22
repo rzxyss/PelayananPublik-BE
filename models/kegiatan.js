@@ -4,6 +4,7 @@ import db from "../config/Database.js";
 const {DataTypes} = Sequelize;
 
 const Kegiatan = db.define('data_kegiatan',{
+    judul_kegiatan: DataTypes.TEXT,
     isi_kegiatan: DataTypes.TEXT,
     image: DataTypes.STRING,
     url: DataTypes.STRING,

@@ -33,6 +33,7 @@ export const addKegiatan = async (req, res) => {
   if (req.files === null)
     return res.status(400).json({ msg: "No File Uploaded" });
   const isi_kegiatan = req.body.isi_kegiatan;
+  const judul_kegiatan = req.body.judul_kegiatan;
   const file = req.files.file;
   const fileSize = file.data.length;
   const ext = path.extname(file.name);
@@ -54,6 +55,7 @@ export const addKegiatan = async (req, res) => {
   } else {
     try {
       await Kegiatan.create({
+        judul_kegiatan: judul_kegiatan,
         isi_kegiatan: isi_kegiatan,
         image: fileName,
         url: url,
@@ -95,10 +97,11 @@ export const editKegiatan = async (req, res) => {
       .toFile(`./public/kegiatan/${fileName}`);
   }
   const isi_kegiatan = req.body.isi_kegiatan;
+  const judul_kegiatan = req.body.judul_kegiatan;
   const url = `${req.protocol}://${req.get("host")}/kegiatan/${fileName}`;
   try {
     await Kegiatan.update(
-      { isi_kegiatan: isi_kegiatan, image: fileName, url: url },
+      { judul_kegiatan: judul_kegiatan, isi_kegiatan: isi_kegiatan, image: fileName, url: url },
       {
         where: {
           id: req.params.id,
