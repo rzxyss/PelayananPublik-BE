@@ -9,6 +9,19 @@ export const getFaq = async(req, res)=>{
     }
 }
 
+export const findByType = async(req, res)=>{
+    try {
+        const response = await Faq.findAll({
+            where: {
+                type: req.body.type
+            }
+        });
+        res.json(response);
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 export const saveFaq = async (req, res)=>{
     try {
         await Faq.create(req.body);
